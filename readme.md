@@ -76,3 +76,24 @@ try {
   notifier.notifyResult()
 }
 ```
+### Declarative pipeline
+
+If you are using the declarative pipeline you must do the Slack configuration in the "Global Slack Notifier Settings" section ("Manage Jenkins" -> "Configure system").
+The required fields are:
+* `Team Subdomain`. For example: `gradiant-mm`
+* `Integration Token` or `Integration Token Credential ID`.
+* `Channel`. For example: `#feed-biometrics`
+
+And then in the `post` section of your Jenkinsfile you can send the Slack notifications like this:
+```
+    ...
+    post {
+        success {
+            slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+
+        failure {
+            slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+    }
+```
